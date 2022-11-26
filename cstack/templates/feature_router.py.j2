@@ -1,0 +1,13 @@
+""" {{ feature_name }} Router """
+
+
+# Imports
+from fastapi import APIRouter
+
+
+# Don't put a prefix, define those in the main application file.
+router = APIRouter() 
+
+@router.get("/")
+async def hello():
+    return "{{ feature_name }}"

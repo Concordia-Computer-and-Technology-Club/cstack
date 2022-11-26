@@ -1,0 +1,16 @@
+""" DB Configuration """
+
+# Imports
+from tortoise import Tortoise, connections
+from {{ project_name }}.api.config.env import env
+
+async def setup():
+    await Tortoise.init(
+        db_url=env.DB_URL,
+        modules={'models': ['{{ project_name }}.api.models']}
+    )
+
+    await Tortoise.generate_schemas()
+
+async def teardown():
+    await connections.close_all()

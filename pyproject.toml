@@ -1,0 +1,30 @@
+[tool.poetry]
+name = "cstack"
+version = "0.0.1"
+description = "Fullstack Python Framework. Built on Python, Vite, and Vue."
+authors = ["Ian Kollipara <ian.kollipara@cune.org>"]
+license = "BSD 2-Clause"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+fastapi = "^0.87.0"
+typer = "^0.7.0"
+rich = "^12.6.0"
+Jinja2 = "^3.1.2"
+tortoise-orm = "^0.19.2"
+pydantic = {extras = ["dotenv"], version = "^1.10.2"}
+aiofiles = "^22.1.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.2.0"
+black = "^22.10.0"
+isort = "^5.10.1"
+pyflakes = "^3.0.1"
+
+[tool.poetry.scripts]
+cstack = "cstack.cli.app:app"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

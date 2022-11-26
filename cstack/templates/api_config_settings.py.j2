@@ -1,0 +1,12 @@
+""" API Settings """
+
+# Imports
+from pydantic import BaseModel
+
+
+class _Settings(BaseModel):
+    version: str = "v1"
+    # Define Global Settings here
+
+
+settings = _Settings()

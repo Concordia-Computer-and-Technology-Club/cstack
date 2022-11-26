@@ -1,0 +1,17 @@
+""" Env Configuration """
+
+
+# Imports
+from pydantic import BaseSettings
+
+
+class _Env(BaseSettings):
+    FRONTEND_URL: str 
+    DB_URL: str
+    # Define your Env Schema here
+
+    class Config:
+        env_file = ".env"
+        env_file_encoding = "utf-8"
+
+env = _Env()
