@@ -7,13 +7,14 @@ Feature Generation
 """
 
 # Imports
+from os import curdir
 from pathlib import Path
 from cstack._internal import templater
 
 
 class FeatureGenerator:
     def __init__(self, feature_name: str) -> None:
-        self.feature_path = Path("api") / "features" / feature_name
+        self.feature_path = curdir / Path("api") / "features" / feature_name
 
     def create_router(self):
         (self.feature_path / "router.py").write_text(

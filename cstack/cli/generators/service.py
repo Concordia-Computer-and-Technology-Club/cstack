@@ -7,6 +7,7 @@ Service Generator
 """
 
 # Imports
+from os import curdir
 from typing import Literal
 from cstack._internal import templater
 from pathlib import Path
@@ -14,7 +15,7 @@ from pathlib import Path
 
 class ServiceGenerator:
     def __init__(self, name: str, feature_name: str) -> None:
-        self.service_name = Path("api") / feature_name / name
+        self.service_name = curdir / Path("api") / feature_name / name
 
     def __call__(self, type_: Literal["module", "class"]):
         match type_:

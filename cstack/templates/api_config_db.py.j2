@@ -2,7 +2,7 @@
 
 # Imports
 from tortoise import Tortoise, connections
-from {{ project_name }}.api.config.env import env
+from {{ project_name|lower }}.api.config.env import env
 
 async def setup():
     await Tortoise.init(

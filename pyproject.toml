@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cstack"
-version = "0.0.1"
+version = "0.0.2"
 description = "Fullstack Python Framework. Built on Python, Vite, and Vue."
 authors = ["Ian Kollipara <ian.kollipara@cune.org>"]
 license = "BSD 2-Clause"
@@ -13,8 +13,9 @@ typer = "^0.7.0"
 rich = "^12.6.0"
 Jinja2 = "^3.1.2"
 tortoise-orm = "^0.19.2"
-pydantic = {extras = ["dotenv"], version = "^1.10.2"}
+pydantic = { extras = ["dotenv"], version = "^1.10.2" }
 aiofiles = "^22.1.0"
+uvicorn = "^0.20.0"
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.2.0"

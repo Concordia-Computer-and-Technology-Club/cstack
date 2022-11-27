@@ -1,0 +1,58 @@
+#! /usr/bin/python3
+
+from typer import Typer, Option
+from cstack.cli.generators import FeatureGenerator, ModelGenerator, ServiceGenerator
+from cstack import __version__
+
+app = Typer()
+generate = Typer()
+
+
+@app.command("version", help="Display Current Cstack Version")
+def show_version():
+    print(f"Cstack Version: {__version__}")
+
+
+@generate.command(
+    "feature", help="Generate a Cstack Feature. See Cstack README for details."
+)
+def gen_feature(name: str):
+    feature = FeatureGenerator(name)
+
+    feature.create_subdirectories()
+    feature.create_router()
+    feature.create_feature_barrel()
+    feature.create_test_file()
+
+
+@generate.command(
+    "service", help="Generate a Cstack Service. See Cstack README for details."
+)
+def gen_service(
+    name: str,
+    feature: str,
+    as_class: bool = Option(
+        False,
+        "-c",
+        "--as-class",
+        help="Generate the service as a class instead of a module.",
+    ),
+):
+    service = ServiceGenerator(name, feature)
+
+    service("class" if as_class else "module")
+
+
+@generate.command(
+    "model", help="Generate a Cstack Model. See Cstack README for details."
+)
+def gen_model(name: str):
+    model = ModelGenerator(name)
+
+    model()
+
+
+app.add_typer(generate, name="generate", help="Scaffold a piece of the API")
+
+if __name__ == "__main__":
+    app()

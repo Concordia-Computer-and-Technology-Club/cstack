@@ -2,7 +2,7 @@
 
 # Imports
 from cstack.core import Application
-from {{project_name}}.api.app import api
+from {{project_name|lower}}.api.app import api
 
 
-{{project_name|lower}} = Application(api=api)
+app = Application(api=api)

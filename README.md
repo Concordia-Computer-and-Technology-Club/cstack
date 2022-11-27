@@ -23,8 +23,10 @@ app/
     | shared/            -- Shared Code
     | tests/             -- Pytest Tests
  | view/                 -- Vue Project
- makefile                -- Project Makefile
  __init__.py             -- Application File
+.env                     -- Env File
+cstack                   -- CLI Tool
+pyproject.toml           -- Poetry File
 ```
 
 

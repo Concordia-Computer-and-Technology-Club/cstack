@@ -6,17 +6,13 @@ Cstack CLI
 from pathlib import Path
 from typer import Typer, Option
 from rich.console import Console
+from rich.prompt import Confirm
 from enum import Enum
-from cstack.cli.generators import (
-    ProjectGenerator,
-    FeatureGenerator,
-    ServiceGenerator,
-    ModelGenerator,
-)
+from cstack.cli.generators import ProjectGenerator
+from cstack import __version__
 
 
 app = Typer()
-generate = Typer()
 console = Console()
 
 
@@ -24,11 +20,6 @@ class NodeManagerChoices(str, Enum):
     NPM = "npm"
     YARN = "yarn"
     PNPM = "pnpm"
-
-
-class ServiceTypes(str, Enum):
-    CLASS = "class"
-    MODULE = "module"
 
 
 @app.command()
@@ -43,7 +34,7 @@ def new(
     ),
 ):
 
-    project = ProjectGenerator(project_name.replace(" ", "_").replace("-", "_").lower())
+    project = ProjectGenerator(project_name)
 
     if not dry_run:
         project.create_project_directory(not no_vue, node_manager.value)
@@ -74,7 +65,7 @@ def new(
         ("app.py", "api_app.py.j2", {"project_name": project.proj_path.name.title()}),
     ):
         if not dry_run:
-            project.create_file(*file_config)
+            project.scaffold_api_file(*file_config)
         console.print(
             f":sparkles: [blue on white reverse] CREATED [/blue on white reverse] {file_config[0]}"
         )
@@ -82,90 +73,23 @@ def new(
     for file_config in (
         (".env", "env_file.j2", {}),
         (
-            "__init__.py",
-            "__init__.py.j2",
-            {"project_name": project.proj_path.name.title()},
+            "pyproject.toml",
+            "pyproject.toml",
+            {"project_name": project.proj_path.name.lower(), "version": __version__},
         ),
-        ("makefile", "makefile", {"project_name": project.proj_path.name.title()}),
-        ("requirements.txt", "requirements.txt", {}),
+        ("cstack", "cstack", {}),
     ):
         if not dry_run:
-            project.create_base_file(*file_config)
+            project.scaffold_top_level_file(*file_config)
         console.print(
             f":sparkles: [blue on white reverse] CREATED [/blue on white reverse] {file_config[0]}"
         )
 
+    if Confirm.ask(
+        "Run [black on white reverse] Poetry Install [/black on white reverse]?"
+    ):
+        project.install()
+
     console.print(
         f":grey_exclamation: [bold blue] Creation Finished! [/bold blue]\nTo Continue type:\n`$ cd {project.proj_path.name}`"
     )
-
-
-@generate.command("feature")
-def gen_feature(
-    name: str,
-    without_test: bool = Option(
-        False, "--without-test", help="Do not generate a test file"
-    ),
-    dry_run: bool = Option(False, "--dry-run", help="show output but don't generate"),
-):
-
-    feature = FeatureGenerator(name)
-
-    if not dry_run:
-        feature.create_subdirectories()
-    console.log(
-        f":sparkles: [blue on white reverse] Created [/blue on white reverse] {name.lower()}/ and subdirectories"
-    )
-
-    if not dry_run:
-        feature.create_router()
-    console.log(
-        f":sparkles: [blue on white reverse] Created [/blue on white reverse] {name.lower()}/router.py"
-    )
-
-    if not dry_run:
-        feature.create_feature_barrel()
-    console.log(
-        f":sparkles: [blue on white reverse] Created [/blue on white reverse] {name.lower()}/__init__.py"
-    )
-
-    if not without_test:
-        if not dry_run:
-            feature.create_test_file()
-        console.log(
-            f":sparkles: [blue on white reverse] Created [/blue on white reverse] tests/test_{name.lower()}.py"
-        )
-
-
-@generate.command("service")
-def gen_service(
-    name: str,
-    feature: str,
-    dry_run: bool = Option(False, "--dry-run", help="show output but don't generate"),
-    type_: ServiceTypes = Option(
-        ServiceTypes.MODULE, "-t", "--type", help="Type of Service to Generate"
-    ),
-):
-    service = ServiceGenerator(name, feature)
-    if not dry_run:
-        service(type_.value)
-    console.log(
-        f":sparkles: [blue on white reverse] Created [/blue on white reverse] {feature.lower()}/services/{name.lower()}.py"
-    )
-
-
-@generate.command("model")
-def gen_model(
-    name: str,
-    dry_run: bool = Option(False, "--dry-run", help="Show Output but don't generate"),
-):
-    model = ModelGenerator(name)
-
-    if not dry_run:
-        model()
-    console.log(
-        f":sparkles: [blue on white reverse] Created [/blue on white reverse] models/{name.lower()}.py"
-    )
-
-
-app.add_typer(generate, name="generate")
