@@ -7,7 +7,7 @@ from {{ project_name|lower }}.api.config.env import env
 async def setup():
     await Tortoise.init(
         db_url=env.DB_URL,
-        modules={'models': ['{{ project_name }}.api.models']}
+        modules={'models': ['{{ project_name|lower }}.api.models']}
     )
 
     await Tortoise.generate_schemas()
