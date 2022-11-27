@@ -3,6 +3,15 @@
 # Imports
 from cstack.core import Application
 from {{project_name|lower}}.api.app import api
+from {{project_name|lower}}.config import db
 
 
 app = Application(api=api)
+
+@app.on_event("startup")
+async def startup():
+    await db.setup()
+
+@app.on_event("shutdown")
+async def shutdown():
+    await db.teardown()

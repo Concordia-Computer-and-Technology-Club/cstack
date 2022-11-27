@@ -22,7 +22,7 @@ class ModelGenerator:
             / PROJECT["tool"]["poetry"]["name"]
             / Path("api")
             / "models"
-            / f"{model_name}.py"
+            / f"{model_name.lower()}.py"
         )
 
     def __call__(self):
@@ -32,3 +32,14 @@ class ModelGenerator:
                 {"model_name": self.model_path.name.removesuffix(".py").title()},
             )
         )
+
+        with (
+            Path(curdir)
+            / PROJECT["tool"]["poetry"]["name"]
+            / Path("api")
+            / "models"
+            / "__init__.py"
+        ).open("a") as f:
+            f.write(
+                f"from .{self.model_path.name.removesuffix('py').lower()} import {self.model_path.name.removesuffix('py').title()}"
+            )
