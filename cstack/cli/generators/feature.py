@@ -10,11 +10,20 @@ Feature Generation
 from os import curdir
 from pathlib import Path
 from cstack._internal import templater
+from tomllib import loads
+
+PROJECT = loads(Path("pyproject.toml").read_text("utf-8"))
 
 
 class FeatureGenerator:
     def __init__(self, feature_name: str) -> None:
-        self.feature_path = curdir / Path("api") / "features" / feature_name
+        self.feature_path = (
+            Path(curdir)
+            / PROJECT["tool"]["poetry"]["name"]
+            / Path("api")
+            / "features"
+            / feature_name
+        )
 
     def create_router(self):
         (self.feature_path / "router.py").write_text(
@@ -37,7 +46,11 @@ class FeatureGenerator:
 
     def create_test_file(self):
         (
-            Path("api") / "tests" / f"test_{self.feature_path.name.lower()}.py"
+            Path(curdir)
+            / PROJECT["tool"]["poetry"]["name"]
+            / Path("api")
+            / "tests"
+            / f"test_{self.feature_path.name.lower()}.py"
         ).write_text(
             templater.render(
                 "feature_test.py.j2", {"feature_name": self.feature_path.name.title()}

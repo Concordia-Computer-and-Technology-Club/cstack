@@ -15,8 +15,8 @@ from cstack._internal import templater
 
 class ProjectGenerator:
     def __init__(self, project_name: str) -> None:
-        self.home_path = Path(project_name)
-        self.proj_path = Path(project_name) / Path(
+        self.home_path = Path(project_name.lower())
+        self.proj_path = Path(project_name.lower()) / Path(
             project_name.replace(" ", "_").replace("-", "_").lower()
         )
 

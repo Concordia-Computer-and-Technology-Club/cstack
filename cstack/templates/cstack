@@ -1,7 +1,9 @@
 #! /usr/bin/python3
 
 from typer import Typer, Option
-from cstack.cli.generators import FeatureGenerator, ModelGenerator, ServiceGenerator
+from cstack.cli.generators.feature import FeatureGenerator
+from cstack.cli.generators.model import ModelGenerator
+from cstack.cli.generators.service import ServiceGenerator
 from cstack import __version__
 
 app = Typer()

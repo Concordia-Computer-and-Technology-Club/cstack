@@ -8,7 +8,7 @@ from typer import Typer, Option
 from rich.console import Console
 from rich.prompt import Confirm
 from enum import Enum
-from cstack.cli.generators import ProjectGenerator
+from cstack.cli.generators.project import ProjectGenerator
 from cstack import __version__
 
 
