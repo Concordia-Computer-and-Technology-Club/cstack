@@ -22,8 +22,9 @@ class ServiceGenerator:
             Path(curdir)
             / PROJECT["tool"]["poetry"]["name"]
             / Path("api")
+            / "features"
             / feature_name
-            / name
+            / f"{name.lower()}.py"
         )
 
     def __call__(self, type_: Literal["module", "class"]):

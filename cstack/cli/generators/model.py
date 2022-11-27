@@ -41,5 +41,5 @@ class ModelGenerator:
             / "__init__.py"
         ).open("a") as f:
             f.write(
-                f"from .{self.model_path.name.removesuffix('py').lower()} import {self.model_path.name.removesuffix('py').title()}"
+                f"from .{self.model_path.name.removesuffix('.py').lower()} import {self.model_path.name.removesuffix('.py').title()}"
             )
